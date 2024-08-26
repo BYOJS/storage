@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.gh-build/
+package-lock.json
+test/src
+test/dist

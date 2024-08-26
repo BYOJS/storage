@@ -1,0 +1,8 @@
+.github
+.npmignore
+.gitignore
+.editorconfig
+node_modules/
+.gh-build/
+test/src
+test/dist

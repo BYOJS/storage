@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Client Storage: Tests</title>
+<style>
+ul { list-style-type: none; padding: 0; }
+ul li { margin: 0.7rem; }
+</style>
+</head>
+<body>
+
+<main>
+<h1>Client Storage: Tests</h1>
+
+<h3><a href="https://github.com/mylofi/client-storage">Github</a></h3>
+
+<hr>
+
+<p><strong>Note:</strong> these tests include the <a href="https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system" target="_blank">Origin Private File System (OPFS) adapter</a>, which is only currently supported on Chrome/Firefox; those specific tests will fail in other browsers.</p>
+
+<p>
+	<button type="button" id="run-tests-btn">run tests</button>
+</p>
+
+<div id="test-results"></div>
+
+</main>
+
+<!-------------------------->
+
+<script type="importmap">
+{
+	"imports": {
+		"client-storage/src/adapter-idb": "./src/adapter.idb.js",
+		"client-storage/src/adapter-local-storage": "./src/adapter.local-storage.js",
+		"client-storage/src/adapter-session-storage": "./src/adapter.session-storage.js",
+		"client-storage/src/adapter-cookie": "./src/adapter.cookie.js",
+		"client-storage/src/adapter-opfs": "./src/adapter.opfs.js",
+
+		"client-storage/dist/adapter-idb": "./dist/adapter.idb.mjs",
+		"client-storage/dist/adapter-local-storage": "./dist/adapter.local-storage.mjs",
+		"client-storage/dist/adapter-session-storage": "./dist/adapter.session-storage.mjs",
+		"client-storage/dist/adapter-cookie": "./dist/adapter.cookie.mjs",
+		"client-storage/dist/adapter-opfs": "./dist/adapter.opfs.mjs",
+
+		"idb-keyval": "./dist/external/idb-keyval.js"
+	}
+}
+</script>
+<script type="module" src="./test.js"></script>
+
+</body>
+</html>

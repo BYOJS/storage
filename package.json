@@ -1,0 +1,50 @@
+{
+	"name": "@lo-fi/client-storage",
+	"description": "simple key-value storage API backed by various client storage mechanisms",
+	"version": "0.9.0",
+	"exports": {
+		"./idb": "./dist/adapter.idb.mjs",
+		"./local-storage": "./dist/adapter.local-storage.mjs",
+		"./session-storage": "./dist/adapter.session-storage.mjs",
+		"./opfs": "./dist/adapter.opfs.mjs",
+		"./cookie": "./dist/adapter.cookie.mjs"
+	},
+	"browser": {
+		"@lo-fi/client-storage/idb": "./dist/adapter.idb.mjs",
+		"@lo-fi/client-storage/local-storage": "./dist/adapter.local-storage.mjs",
+		"@lo-fi/client-storage/session-storage": "./dist/adapter.session-storage.mjs",
+		"@lo-fi/client-storage/opfs": "./dist/adapter.opfs.mjs",
+		"@lo-fi/client-storage/cookie": "./dist/adapter.cookie.mjs"
+	},
+	"scripts": {
+		"build:all": "node scripts/build-all.js",
+		"build:gh-pages": "npm run build:all && node scripts/build-gh-pages.js",
+		"build": "npm run build:all",
+		"test:start": "npx http-server test/ -p 8080",
+		"test": "npm run test:start",
+		"postinstall": "node scripts/postinstall.js",
+		"prepublishOnly": "npm run build:all"
+	},
+	"dependencies": {
+		"idb-keyval": "~6.2.1"
+	},
+	"devDependencies": {
+		"micromatch": "~4.0.5",
+		"recursive-readdir-sync": "~1.0.6",
+		"terser": "~5.29.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mylofi/client-storage.git"
+	},
+	"keywords": [
+		"storage"
+	],
+	"bugs": {
+		"url": "https://github.com/mylofi/client-storage/issues",
+		"email": "getify@gmail.com"
+	},
+	"homepage": "https://github.com/mylofi/client-storage",
+	"author": "Kyle Simpson <getify@gmail.com>",
+	"license": "MIT"
+}
