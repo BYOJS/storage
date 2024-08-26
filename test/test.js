@@ -54,49 +54,54 @@ async function runTests() {
 	var expectedResults = [
 		[ "idb", "has(1)", false ],
 		[ "idb", "get(1)", null ],
-		[ "idb", "set", true ],
+		[ "idb", "set(1)", true ],
 		[ "idb", "has(2)", true ],
 		[ "idb", "get(2)", "world" ],
-		[ "idb", "keys(1)", [ "hello", ], ],
-		[ "idb", "entries", [ [ "hello", "world", ], ], ],
+		[ "idb", "set(2)", true ],
+		[ "idb", "keys(1)", [ "hello", "meaning", ], ],
+		[ "idb", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "idb", "remove", true ],
-		[ "idb", "keys(2)", [], ],
+		[ "idb", "keys(2)", [ "meaning", ], ],
 		[ "local-storage", "has(1)", false ],
 		[ "local-storage", "get(1)", null ],
-		[ "local-storage", "set", true ],
+		[ "local-storage", "set(1)", true ],
 		[ "local-storage", "has(2)", true ],
 		[ "local-storage", "get(2)", "world" ],
-		[ "local-storage", "keys(1)", [ "hello", ], ],
-		[ "local-storage", "entries", [ [ "hello", "world", ], ], ],
+		[ "local-storage", "set(2)", true ],
+		[ "local-storage", "keys(1)", [ "hello", "meaning", ], ],
+		[ "local-storage", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "local-storage", "remove", true ],
-		[ "local-storage", "keys(2)", [], ],
+		[ "local-storage", "keys(2)", [ "meaning", ], ],
 		[ "session-storage", "has(1)", false ],
 		[ "session-storage", "get(1)", null ],
-		[ "session-storage", "set", true ],
+		[ "session-storage", "set(1)", true ],
 		[ "session-storage", "has(2)", true ],
 		[ "session-storage", "get(2)", "world" ],
-		[ "session-storage", "keys(1)", [ "hello", ], ],
-		[ "session-storage", "entries", [ [ "hello", "world", ], ], ],
+		[ "session-storage", "set(2)", true ],
+		[ "session-storage", "keys(1)", [ "hello", "meaning", ], ],
+		[ "session-storage", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "session-storage", "remove", true ],
-		[ "session-storage", "keys(2)", [], ],
+		[ "session-storage", "keys(2)", [ "meaning", ], ],
 		[ "cookie", "has(1)", false ],
 		[ "cookie", "get(1)", null ],
-		[ "cookie", "set", true ],
+		[ "cookie", "set(1)", true ],
 		[ "cookie", "has(2)", true ],
 		[ "cookie", "get(2)", "world" ],
-		[ "cookie", "keys(1)", [ "hello", ], ],
-		[ "cookie", "entries", [ [ "hello", "world", ], ], ],
+		[ "cookie", "set(2)", true ],
+		[ "cookie", "keys(1)", [ "hello", "meaning", ], ],
+		[ "cookie", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "cookie", "remove", true ],
-		[ "cookie", "keys(2)", [], ],
+		[ "cookie", "keys(2)", [ "meaning", ], ],
 		[ "opfs", "has(1)", false ],
 		[ "opfs", "get(1)", null ],
-		[ "opfs", "set", true ],
+		[ "opfs", "set(1)", true ],
 		[ "opfs", "has(2)", true ],
 		[ "opfs", "get(2)", "world" ],
-		[ "opfs", "keys(1)", [ "hello", ], ],
-		[ "opfs", "entries", [ [ "hello", "world", ], ], ],
+		[ "opfs", "set(2)", true ],
+		[ "opfs", "keys(1)", [ "hello", "meaning", ], ],
+		[ "opfs", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "opfs", "remove", true ],
-		[ "opfs", "keys(2)", [], ],
+		[ "opfs", "keys(2)", [ "meaning", ], ],
 	];
 	var testResults = [];
 
@@ -106,13 +111,14 @@ async function runTests() {
 	for (let store of stores) {
 		testResults.push([ storageTypes[store.storageType][0], "has(1)", await store.has("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "get(1)", await store.get("hello"), ]);
-		testResults.push([ storageTypes[store.storageType][0], "set", await store.set("hello","world"), ]);
+		testResults.push([ storageTypes[store.storageType][0], "set(1)", await store.set("hello","world"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "has(2)", await store.has("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "get(2)", await store.get("hello"), ]);
-		testResults.push([ storageTypes[store.storageType][0], "keys(1)", await store.keys(), ]);
-		testResults.push([ storageTypes[store.storageType][0], "entries", await store.entries(), ]);
+		testResults.push([ storageTypes[store.storageType][0], "set(2)", await store.set("meaning",{ ofLife: 42, }), ]);
+		testResults.push([ storageTypes[store.storageType][0], "keys(1)", sortKeys(await store.keys()), ]);
+		testResults.push([ storageTypes[store.storageType][0], "entries", sortKeys(await store.entries()), ]);
 		testResults.push([ storageTypes[store.storageType][0], "remove", await store.remove("hello"), ]);
-		testResults.push([ storageTypes[store.storageType][0], "keys(2)", await store.keys(), ]);
+		testResults.push([ storageTypes[store.storageType][0], "keys(2)", sortKeys(await store.keys()), ]);
 	}
 	var testsPassed = true;
 	for (let [ testIdx, testResult ] of testResults.entries()) {
@@ -131,4 +137,22 @@ async function runTests() {
 	else {
 		testResultsEl.innerHTML += "<strong>...Some tests failed.</strong><br>";
 	}
+}
+
+function sortKeys(vals) {
+	if (vals.length > 0) {
+		vals = [ ...vals ];
+		// entries?
+		if (Array.isArray(vals[0])) {
+			return vals.sort(([ name1, ],[ name2, ]) => (
+				name1.localeCompare(name2)
+			));
+		}
+		else {
+			return vals.sort((name1,name2) => (
+				name1.localeCompare(name2)
+			));
+		}
+	}
+	return vals;
 }

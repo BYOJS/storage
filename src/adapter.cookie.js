@@ -1,3 +1,8 @@
+import { safeJSONParse, } from "./util.js";
+
+
+// ***********************
+
 var storageType = "cookie";
 export {
 	storageType,
@@ -27,11 +32,7 @@ function has(name) {
 }
 
 function get(name) {
-	var value = getAllCookies()[name];
-	if (value != null && value != "") {
-		try { return JSON.parse(value); } catch (err) {}
-	}
-	return (value != null ? value : null);
+	return safeJSONParse(getAllCookies()[name]);
 }
 
 function set(name,value) {
@@ -83,7 +84,13 @@ function keys() {
 }
 
 function entries() {
-	return Object.entries(getAllCookies());
+	return (
+		Object.entries(getAllCookies())
+			.map(([ name, value ]) => ([
+				name,
+				safeJSONParse(value)
+			]))
+	);
 }
 
 function getAllCookies() {

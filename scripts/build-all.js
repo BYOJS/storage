@@ -57,7 +57,7 @@ async function main() {
 		SRC_DIR,
 		DIST_DIR,
 		(contents,outputPath,filename = path.basename(outputPath)) => prepareFileContents(
-			contents.replace(/(\.\/lv)\.js/,"$1.mjs"),
+			contents.replace(/(\.\/util)\.js/,"$1.mjs"),
 			outputPath.replace(/\.js$/,".mjs"),
 			filename.replace(/\.js$/,".mjs")
 		),

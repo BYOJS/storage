@@ -1,3 +1,8 @@
+import { safeJSONParse, } from "./util.js";
+
+
+// ***********************
+
 var storageType = "session-storage";
 export {
 	storageType,
@@ -27,11 +32,7 @@ function has(name) {
 }
 
 function get(name) {
-	var value = window.sessionStorage.getItem(name);
-	if (value != null && value != "") {
-		try { return JSON.parse(value); } catch (err) {}
-	}
-	return value;
+	return safeJSONParse(window.sessionStorage.getItem(name));
 }
 
 function set(name,value) {
@@ -71,7 +72,7 @@ function entries() {
 		let name = window.sessionStorage.key(i);
 		storeEntries.push([
 			name,
-			window.sessionStorage.getItem(name),
+			safeJSONParse(window.sessionStorage.getItem(name)),
 		]);
 	}
 	return storeEntries;

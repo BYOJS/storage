@@ -1,3 +1,8 @@
+import { safeJSONParse, isPromise, } from "./util.js";
+
+
+// ***********************
+
 var rootFS;
 var storageType = "opfs";
 export {
@@ -46,10 +51,7 @@ async function get(name) {
 	var fh = await rootFS.getFileHandle(name,{ create: true, });
 	var file = await fh.getFile();
 	var value = (await file.text()) || null;
-	if (value != null && value != "") {
-		try { return JSON.parse(value); } catch (err) {}
-	}
-	return value;
+	return safeJSONParse(value);
 }
 
 async function set(name,value) {
@@ -104,7 +106,7 @@ async function entries() {
 		let value = (await file.text()) || null;
 		if (value != null && value != "") {
 			try {
-				fsEntries.push([ name, JSON.parse(value), ]);
+				fsEntries.push([ name, safeJSONParse(value), ]);
 				continue;
 			} catch (err) {}
 		}
@@ -119,8 +121,4 @@ function getRootFS() {
 			navigator.storage.getDirectory() :
 			rootFS
 	);
-}
-
-function isPromise(val) {
-	return (val && typeof val == "object" && typeof val.then == "function");
 }

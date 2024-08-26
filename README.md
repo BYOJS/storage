@@ -116,11 +116,11 @@ If you are not using a bundler (Astro, Vite, Webpack, etc) for your web applicat
 <script type="importmap">
 {
     "imports": {
-        "client-storage/adapter/idb": "/path/to/js-assets/client-storage/adapter.idb.mjs",
-        "client-storage/adapter/local-storage": "/path/to/js-assets/client-storage/adapter.local-storage.mjs",
-        "client-storage/adapter/session-storage": "/path/to/js-assets/client-storage/adapter.session-storage.mjs",
-        "client-storage/adapter/cookie": "/path/to/js-assets/client-storage/adapter.cookie.mjs",
-        "client-storage/adapter/opfs": "/path/to/js-assets/client-storage/adapter.opfs.mjs",
+        "client-storage/idb": "/path/to/js-assets/client-storage/adapter.idb.mjs",
+        "client-storage/local-storage": "/path/to/js-assets/client-storage/adapter.local-storage.mjs",
+        "client-storage/session-storage": "/path/to/js-assets/client-storage/adapter.session-storage.mjs",
+        "client-storage/cookie": "/path/to/js-assets/client-storage/adapter.cookie.mjs",
+        "client-storage/opfs": "/path/to/js-assets/client-storage/adapter.opfs.mjs",
 
         "idb-keyval": "/path/to/js-assets/client-storage/external/idb-keyval.js"
     }
@@ -166,13 +166,17 @@ The key-value oriented methods available on each adapter's API are:
 
 * `set(name,value)`: set a `value` at `name` into storage
 
-    **Note:** `value` can be any JSON-serializable object (object, array) or any primitive value; however, bare primitive values will end up being stored (and then retrieved) as strings.
+   `value` can be any JSON-serializable object (object, array) or any primitive value; however, bare primitive values will end up being stored (and then retrieved) as strings.
+
+   Further, any string value that is parseable as JSON *will be parsed* as JSON; for example, the string value `"[1,2,3]"` will be parsed as a JSON-serialized array, and return `[1,2,3]` instead.
 
 * `remove(name)`: remove `name` (if any) from storage
 
 * `keys()`: returns an array of existing keys in storage
 
 * `entries()`: returns an array of `[ key, value ]` tuples
+
+**NOTE:** All of these methods are async (promise-returning).
 
 ## Re-building `dist/*`
 
