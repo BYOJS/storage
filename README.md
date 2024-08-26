@@ -50,7 +50,7 @@ For example:
 
 ```js
 try {
-    set("session-jwt",sessionJWT);
+    await set("session-jwt",sessionJWT);
 }
 catch (err) {
     if (err.reason?.name == "QuotaExceededError") {
