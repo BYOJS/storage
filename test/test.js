@@ -115,10 +115,10 @@ async function runTests() {
 		testResults.push([ storageTypes[store.storageType][0], "has(2)", await store.has("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "get(2)", await store.get("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "set(2)", await store.set("meaning",{ ofLife: 42, }), ]);
-		testResults.push([ storageTypes[store.storageType][0], "keys(1)", sortKeys(await store.keys()), ]);
-		testResults.push([ storageTypes[store.storageType][0], "entries", sortKeys(await store.entries()), ]);
+		testResults.push([ storageTypes[store.storageType][0], "keys(1)", sortKeys(filterLocalMetadata(await store.keys())), ]);
+		testResults.push([ storageTypes[store.storageType][0], "entries", sortKeys(filterLocalMetadata(await store.entries())), ]);
 		testResults.push([ storageTypes[store.storageType][0], "remove", await store.remove("hello"), ]);
-		testResults.push([ storageTypes[store.storageType][0], "keys(2)", sortKeys(await store.keys()), ]);
+		testResults.push([ storageTypes[store.storageType][0], "keys(2)", sortKeys(filterLocalMetadata(await store.keys())), ]);
 	}
 	var testsPassed = true;
 	for (let [ testIdx, testResult ] of testResults.entries()) {
@@ -137,6 +137,23 @@ async function runTests() {
 	else {
 		testResultsEl.innerHTML += "<strong>...Some tests failed.</strong><br>";
 	}
+}
+
+function filterLocalMetadata(vals) {
+	if (vals.length > 0) {
+		// entries?
+		if (Array.isArray(vals[0])) {
+			return vals.filter(([ name, value ]) => (
+				!/^local-((vault-.+)|(identities))/.test(name)
+			));
+		}
+		else {
+			return vals.filter(name => (
+				!/^local-((vault-.+)|(identities))/.test(name)
+			));
+		}
+	}
+	return vals;
 }
 
 function sortKeys(vals) {

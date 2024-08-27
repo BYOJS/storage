@@ -1,6 +1,6 @@
 {
 	"name": "@lo-fi/client-storage",
-	"description": "simple key-value storage API backed by various client storage mechanisms",
+	"description": "Simple key-value storage API backed by various client storage mechanisms",
 	"version": "0.9.0",
 	"exports": {
 		"./idb": "./dist/adapter.idb.mjs",

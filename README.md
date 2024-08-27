@@ -106,7 +106,7 @@ Just `import` the adapter(s) of your choice, like so:
 import { get, set } from "@lo-fi/client-storage/{WHICHEVER}";
 ```
 
-The bundler tool should pick up and find whatever files (and dependencies) needed.
+The bundler tool should pick up and find whatever files (and dependencies) are needed.
 
 ### Without using a bundler
 
