@@ -18,7 +18,9 @@ ul li { margin: 0.7rem; }
 
 <hr>
 
-<p><strong>Note:</strong> these tests include the <a href="https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system" target="_blank">Origin Private File System (OPFS) adapter</a>, which is only currently supported on Chrome/Firefox; those specific tests will fail in other browsers.</p>
+<p>
+	<strong>Note:</strong> these tests include the <a href="https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system" target="_blank">Origin Private File System (OPFS) adapter</a>, which is only currently supported on Chrome/Firefox; those specific tests will fail in other browsers. However, the OPFS-Worker adapter (which uses a Web Worker) <em>should</em> work on most modern browsers (desktop and mobile).
+</p>
 
 <p>
 	<button type="button" id="run-tests-btn">run tests</button>
@@ -33,17 +35,19 @@ ul li { margin: 0.7rem; }
 <script type="importmap">
 {
 	"imports": {
-		"client-storage/src/adapter-idb": "./src/adapter.idb.js",
-		"client-storage/src/adapter-local-storage": "./src/adapter.local-storage.js",
-		"client-storage/src/adapter-session-storage": "./src/adapter.session-storage.js",
-		"client-storage/src/adapter-cookie": "./src/adapter.cookie.js",
-		"client-storage/src/adapter-opfs": "./src/adapter.opfs.js",
+		"client-storage/src/idb": "./src/adapter.idb.js",
+		"client-storage/src/local-storage": "./src/adapter.local-storage.js",
+		"client-storage/src/session-storage": "./src/adapter.session-storage.js",
+		"client-storage/src/cookie": "./src/adapter.cookie.js",
+		"client-storage/src/opfs": "./src/adapter.opfs.js",
+		"client-storage/src/opfs-worker": "./src/adapter.opfs-worker.js",
 
-		"client-storage/dist/adapter-idb": "./dist/adapter.idb.mjs",
-		"client-storage/dist/adapter-local-storage": "./dist/adapter.local-storage.mjs",
-		"client-storage/dist/adapter-session-storage": "./dist/adapter.session-storage.mjs",
-		"client-storage/dist/adapter-cookie": "./dist/adapter.cookie.mjs",
-		"client-storage/dist/adapter-opfs": "./dist/adapter.opfs.mjs",
+		"client-storage/dist/idb": "./dist/adapter.idb.mjs",
+		"client-storage/dist/local-storage": "./dist/adapter.local-storage.mjs",
+		"client-storage/dist/session-storage": "./dist/adapter.session-storage.mjs",
+		"client-storage/dist/cookie": "./dist/adapter.cookie.mjs",
+		"client-storage/dist/opfs": "./dist/adapter.opfs.mjs",
+		"client-storage/dist/opfs-worker": "./dist/adapter.opfs-worker.mjs",
 
 		"idb-keyval": "./dist/external/idb-keyval.js"
 	}

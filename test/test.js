@@ -1,11 +1,12 @@
 // note: these module specifiers come from the import-map
 //    in index.html; swap "src" for "dist" here to test
 //    against the dist/* files
-import * as IDBStore from "client-storage/src/adapter-idb";
-import * as LSStore from "client-storage/src/adapter-local-storage";
-import * as SSStore from "client-storage/src/adapter-session-storage";
-import * as CookieStore from "client-storage/src/adapter-cookie";
-import * as OPFSStore from "client-storage/src/adapter-opfs";
+import IDBStore from "client-storage/src/idb";
+import LSStore from "client-storage/src/local-storage";
+import SSStore from "client-storage/src/session-storage";
+import CookieStore from "client-storage/src/cookie";
+import OPFSStore from "client-storage/src/opfs";
+import OPFSWorkerStore from "client-storage/src/opfs-worker";
 
 
 // ***********************
@@ -16,6 +17,7 @@ const storageTypes = {
 	"session-storage": [ "Session Storage", SSStore, ],
 	"cookie": [ "Cookies", CookieStore, ],
 	"opfs": [ "Origin Private FS", OPFSStore, ],
+	"opfs-worker": [ "OPFS-Worker", OPFSWorkerStore, ],
 };
 
 var runTestsBtn;
@@ -102,12 +104,22 @@ async function runTests() {
 		[ "opfs", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "opfs", "remove", true ],
 		[ "opfs", "keys(2)", [ "meaning", ], ],
+		[ "opfs-worker", "has(1)", false ],
+		[ "opfs-worker", "get(1)", null ],
+		[ "opfs-worker", "set(1)", true ],
+		[ "opfs-worker", "has(2)", true ],
+		[ "opfs-worker", "get(2)", "world" ],
+		[ "opfs-worker", "set(2)", true ],
+		[ "opfs-worker", "keys(1)", [ "hello", "meaning", ], ],
+		[ "opfs-worker", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
+		[ "opfs-worker", "remove", true ],
+		[ "opfs-worker", "keys(2)", [ "meaning", ], ],
 	];
 	var testResults = [];
 
 	testResultsEl.innerHTML = "Client Storage tests running...<br>";
 
-	var stores = [ IDBStore, LSStore, SSStore, CookieStore, OPFSStore ];
+	var stores = [ IDBStore, LSStore, SSStore, CookieStore, OPFSStore, OPFSWorkerStore, ];
 	for (let store of stores) {
 		testResults.push([ storageTypes[store.storageType][0], "has(1)", await store.has("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "get(1)", await store.get("hello"), ]);
@@ -119,6 +131,7 @@ async function runTests() {
 		testResults.push([ storageTypes[store.storageType][0], "entries", sortKeys(filterLocalMetadata(await store.entries())), ]);
 		testResults.push([ storageTypes[store.storageType][0], "remove", await store.remove("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "keys(2)", sortKeys(filterLocalMetadata(await store.keys())), ]);
+		await store.remove("meaning");
 	}
 	var testsPassed = true;
 	for (let [ testIdx, testResult ] of testResults.entries()) {

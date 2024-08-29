@@ -36,7 +36,13 @@ The main purpose of **Client Storage** is to provide a set of adapters that norm
 
 * `cookie`: [Web cookies](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/cookies)
 
-* `OPFS`: [Origin Private File System](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), specifically [virtual origin filesystem](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/getDirectory)
+* `opfs`: [Origin Private File System (OPFS)](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), specifically [the virtual origin filesystem](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/getDirectory)
+
+    **Warning:** [Browser support for `write()`](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemWritableFileStream/write#browser_compatibility) into OPFS from the main thread (as this adapter does) is limited to desktop (not mobile!) Chromium and Firefox browsers. See `opfs-worker` for broader device/browser support.
+
+* `opfs-worker`: Uses a Web Worker (background thread) for OPFS access, specifically to [expand OPFS support to most devices/browsers ](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle#browser_compatibility) (via synchronous `write()` in a Web Worker or Service Worker).
+
+    **Warning:** Web workers in some cases require modified security settings (for the site/app) -- for example, [a Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), specifically [the `worker-src` directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/worker-src).
 
 Each of these client-side storage mechanisms has its own pros/cons, so choice should be made carefully.
 
@@ -79,11 +85,7 @@ All these concerns considered, the `cookie` adapter *really should not be used* 
 
 #### Origin Private File System
 
-The [Origin Private File System](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) (OPFS) web feature can be used to read/write "files" in a virtual filesystem on the client's device (private to the page's origin). The `opfs` adapter provided with this library creates JSON "files" in this OPFS to store the vault data, one per vault.
-
-Be aware: [the ability to asynchronously `write()`](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemWritableFileStream/write#browser_compatibility) on the main browser thread, into OPFS, is currently only supported on desktop (not mobile!) Chromium and Firefox browsers.
-
-However, there is [widespread browser/device support for synchronous `write()`](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle#browser_compatibility) into OPFS, if done off-thread in a background worker (Web Worker, Service Worker). The `opfs` adapter does *not currently* support this approach, but it may in the future.
+The [Origin Private File System (OPFS)](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) web feature can be used to read/write "files" in a virtual filesystem on the client's device (private to the page's origin). The `opfs` and `opfs-worker` adapters provided with this library create JSON "files" in OPFS to store the vault data, one file per vault.
 
 ## Deployment / Import
 
@@ -121,6 +123,7 @@ If you are not using a bundler (Astro, Vite, Webpack, etc) for your web applicat
         "client-storage/session-storage": "/path/to/js-assets/client-storage/adapter.session-storage.mjs",
         "client-storage/cookie": "/path/to/js-assets/client-storage/adapter.cookie.mjs",
         "client-storage/opfs": "/path/to/js-assets/client-storage/adapter.opfs.mjs",
+        "client-storage/opfs-worker": "/path/to/js-assets/client-storage/adapter.opfs-worker.mjs",
 
         "idb-keyval": "/path/to/js-assets/client-storage/external/idb-keyval.js"
     }

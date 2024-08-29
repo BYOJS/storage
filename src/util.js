@@ -1,6 +1,7 @@
 export {
 	safeJSONParse,
 	isPromise,
+	getDeferred,
 };
 
 
@@ -15,4 +16,17 @@ function safeJSONParse(value) {
 
 function isPromise(val) {
 	return (val && typeof val == "object" && typeof val.then == "function");
+}
+
+function getDeferred() {
+	if (typeof Promise.withResolvers == "function") {
+		return Promise.withResolvers();
+	}
+	else {
+		let resolve, reject, promise = new Promise((res,rej) => {
+			resolve = res;
+			reject = rej;
+		});
+		return { promise, resolve, reject, };
+	}
 }

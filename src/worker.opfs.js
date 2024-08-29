@@ -1,33 +1,33 @@
-import { safeJSONParse, isPromise, } from "./util.js";
+import { isPromise, } from "./util.js";
 
 
 // ***********************
 
 var rootFS;
 
-var storageType = "opfs";
-export {
-	storageType,
-	has,
-	get,
-	set,
-	remove,
-	keys,
-	entries,
-}
-var publicAPI = {
-	storageType,
-	has,
-	get,
-	set,
-	remove,
-	keys,
-	entries,
-};
-export default publicAPI;
+self.addEventListener("message",onMessage);
+self.postMessage({ "ready": true });
 
 
 // ***********************
+
+async function onMessage({ data, } = {}) {
+	var recognizedMessages = {
+		has,
+		get,
+		set,
+		remove,
+		keys,
+		entries,
+	};
+	for (let [ type, handler ] of Object.entries(recognizedMessages)) {
+		if (type in data) {
+			self.postMessage({ [`${type}-complete`]: (await handler(...data[type])), });
+			return;
+		}
+	}
+	console.error(`Unrecognized/unexpected message from host: ${JSON.stringify(data)}`);
+}
 
 async function has(name) {
 	// note: trick to skip `await` microtask when
@@ -51,9 +51,11 @@ async function get(name) {
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	var fh = await rootFS.getFileHandle(name,{ create: true, });
-	var file = await fh.getFile();
-	var value = (await file.text()) || null;
-	return safeJSONParse(value);
+	var ah = await fh.createSyncAccessHandle();
+	var buffer = new ArrayBuffer(ah.getSize());
+	ah.read(buffer);
+	ah.close();
+	return (new TextDecoder()).decode(buffer) || null;
 }
 
 async function set(name,value) {
@@ -63,13 +65,16 @@ async function set(name,value) {
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	var fh = await rootFS.getFileHandle(name,{ create: true, });
-	var file = await fh.createWritable();
-	await file.write(
+	var ah = await fh.createSyncAccessHandle();
+	var data = (new TextEncoder()).encode(
 		value != null && typeof value == "object" ?
 			JSON.stringify(value) :
 			String(value)
 	);
-	await file.close();
+	ah.truncate(0);
+	ah.write(data);
+	ah.flush();
+	ah.close();
 	return true;
 }
 
@@ -108,7 +113,7 @@ async function entries() {
 		let value = (await file.text()) || null;
 		if (value != null && value != "") {
 			try {
-				fsEntries.push([ name, safeJSONParse(value), ]);
+				fsEntries.push([ name, value, ]);
 				continue;
 			} catch (err) {}
 		}
