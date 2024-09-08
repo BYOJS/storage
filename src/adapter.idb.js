@@ -39,7 +39,7 @@ async function has(name) {
 
 async function get(name) {
 	var value = await idbGet(name);
-	return (value != null ? value : null);
+	return (value ?? null);
 }
 
 async function set(name,value) {

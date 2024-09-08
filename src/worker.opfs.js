@@ -1,9 +1,10 @@
-import { isPromise, } from "./util.js";
+import {
+	isPromise,
+	getRootFS,
+} from "./util.js";
 
 
 // ***********************
-
-var rootFS;
 
 self.addEventListener("message",onMessage);
 self.postMessage({ "ready": true });
@@ -32,7 +33,7 @@ async function onMessage({ data, } = {}) {
 async function has(name) {
 	// note: trick to skip `await` microtask when
 	// not a promise
-	rootFS = getRootFS();
+	var rootFS = getRootFS();
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	var keys = [];
@@ -47,7 +48,7 @@ async function has(name) {
 async function get(name) {
 	// note: trick to skip `await` microtask when
 	// not a promise
-	rootFS = getRootFS();
+	var rootFS = getRootFS();
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	var fh = await rootFS.getFileHandle(name,{ create: true, });
@@ -61,7 +62,7 @@ async function get(name) {
 async function set(name,value) {
 	// note: trick to skip `await` microtask when
 	// not a promise
-	rootFS = getRootFS();
+	var rootFS = getRootFS();
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	var fh = await rootFS.getFileHandle(name,{ create: true, });
@@ -81,7 +82,7 @@ async function set(name,value) {
 async function remove(name) {
 	// note: trick to skip `await` microtask when
 	// not a promise
-	rootFS = getRootFS();
+	var rootFS = getRootFS();
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	await rootFS.removeEntry(name);
@@ -91,7 +92,7 @@ async function remove(name) {
 async function keys() {
 	// note: trick to skip `await` microtask when
 	// not a promise
-	rootFS = getRootFS();
+	var rootFS = getRootFS();
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	var fsKeys = [];
@@ -104,7 +105,7 @@ async function keys() {
 async function entries() {
 	// note: trick to skip `await` microtask when
 	// not a promise
-	rootFS = getRootFS();
+	var rootFS = getRootFS();
 	rootFS = isPromise(rootFS) ? await rootFS : rootFS;
 
 	var fsEntries = [];
@@ -120,12 +121,4 @@ async function entries() {
 		fsEntries.push([ name, value, ]);
 	}
 	return fsEntries;
-}
-
-function getRootFS() {
-	return (
-		rootFS == null ?
-			navigator.storage.getDirectory() :
-			rootFS
-	);
 }
