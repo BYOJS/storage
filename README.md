@@ -1,13 +1,13 @@
-# Client Storage
+# Storage
 
-[![npm Module](https://badge.fury.io/js/@lo-fi%2Fclient-storage.svg)](https://www.npmjs.org/package/@lo-fi/client-storage)
+[![npm Module](https://badge.fury.io/js/@byojs%2Fstorage.svg)](https://www.npmjs.org/package/@byojs/storage)
 [![License](https://img.shields.io/badge/license-MIT-a1356a)](LICENSE.txt)
 
-**Client Storage** provides a set of adapters for easy client-side key-value storage.
+**Storage** provides a set of adapters for easy client-side key-value storage.
 
 ```js
 // for IndexedDB:
-import { get, set } from "@lo-fi/client-storage/idb";
+import { get, set } from "@byojs/storage/idb";
 
 await set("Hello","World!");       // true
 
@@ -16,17 +16,17 @@ await get("Hello");               // "World!"
 
 ----
 
-[Library Tests (Demo)](https://mylofi.github.io/client-storage/)
+[Library Tests (Demo)](https://byojs.github.io/storage/)
 
 ----
 
 ## Overview
 
-The main purpose of **Client Storage** is to provide a set of adapters that normalize across various client side storage mechanisms (`localStorage` / `sessionStorage`, IndexedDB, cookies, and OPFS) with a consistent key-value API (`get()`, `set()`, etc).
+The main purpose of **Storage** is to provide a set of adapters that normalize across various client side storage mechanisms (`localStorage` / `sessionStorage`, IndexedDB, cookies, and OPFS) with a consistent key-value API (`get()`, `set()`, etc).
 
 ## Client Side Storage Adapters
 
-**Client Storage** ships with adapters for the following storage mechanisms:
+**Storage** ships with adapters for the following storage mechanisms:
 
 * `idb`: [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
 
@@ -90,10 +90,10 @@ The [Origin Private File System (OPFS)](https://developer.mozilla.org/en-US/docs
 ## Deployment / Import
 
 ```cmd
-npm install @lo-fi/client-storage
+npm install @byojs/storage
 ```
 
-The [**@lo-fi/client-storage** npm package](https://npmjs.com/package/@lo-fi/client-storage) includes a `dist/` directory with all files you need to deploy **Client Storage** (and its dependencies) into your application/project.
+The [**@byojs/storage** npm package](https://npmjs.com/package/@byojs/storage) includes a `dist/` directory with all files you need to deploy **Storage** (and its dependencies) into your application/project.
 
 **Note:** If you obtain this library via git instead of npm, you'll need to [build `dist/` manually](#re-building-dist) before deployment.
 
@@ -105,27 +105,27 @@ Just `import` the adapter(s) of your choice, like so:
 
 ```js
 // {WHICHEVER}: "idb", "local-storage", etc
-import { get, set } from "@lo-fi/client-storage/{WHICHEVER}";
+import { get, set } from "@byojs/storage/{WHICHEVER}";
 ```
 
 The bundler tool should pick up and find whatever files (and dependencies) are needed.
 
 ### Without using a bundler
 
-If you are not using a bundler (Astro, Vite, Webpack, etc) for your web application, and just deploying the contents of `dist/` as-is without changes (e.g., to `/path/to/js-assets/client-storage/`), you'll need an [Import Map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) in your app's HTML:
+If you are not using a bundler (Astro, Vite, Webpack, etc) for your web application, and just deploying the contents of `dist/` as-is without changes (e.g., to `/path/to/js-assets/storage/`), you'll need an [Import Map](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap) in your app's HTML:
 
 ```html
 <script type="importmap">
 {
     "imports": {
-        "client-storage/idb": "/path/to/js-assets/client-storage/adapter.idb.mjs",
-        "client-storage/local-storage": "/path/to/js-assets/client-storage/adapter.local-storage.mjs",
-        "client-storage/session-storage": "/path/to/js-assets/client-storage/adapter.session-storage.mjs",
-        "client-storage/cookie": "/path/to/js-assets/client-storage/adapter.cookie.mjs",
-        "client-storage/opfs": "/path/to/js-assets/client-storage/adapter.opfs.mjs",
-        "client-storage/opfs-worker": "/path/to/js-assets/client-storage/adapter.opfs-worker.mjs",
+        "storage/idb": "/path/to/js-assets/storage/adapter.idb.mjs",
+        "storage/local-storage": "/path/to/js-assets/storage/adapter.local-storage.mjs",
+        "storage/session-storage": "/path/to/js-assets/storage/adapter.session-storage.mjs",
+        "storage/cookie": "/path/to/js-assets/storage/adapter.cookie.mjs",
+        "storage/opfs": "/path/to/js-assets/storage/adapter.opfs.mjs",
+        "storage/opfs-worker": "/path/to/js-assets/storage/adapter.opfs-worker.mjs",
 
-        "idb-keyval": "/path/to/js-assets/client-storage/external/idb-keyval.js"
+        "idb-keyval": "/path/to/js-assets/storage/external/idb-keyval.js"
     }
 }
 </script>
@@ -135,20 +135,20 @@ Now, you'll be able to `import` the library in your app in a friendly/readable w
 
 ```js
 // {WHICHEVER}: "idb", "local-storage", etc
-import { get, set } from "client-storage/{WHICHEVER}";
+import { get, set } from "storage/{WHICHEVER}";
 ```
 
-**Note:** If you omit the above *adapter* import-map entries, you can still `import` **Client Storage** by specifying the proper full path to whichever `adapter.*.mjs` file(s) you want to use.
+**Note:** If you omit the above *adapter* import-map entries, you can still `import` **Storage** by specifying the proper full path to whichever `adapter.*.mjs` file(s) you want to use.
 
 However, the entry above for `idb-keyval` is more required. Alternatively, you'll have to edit the `adapter.idb.mjs` file to change its `import` specifier for `idb-keyval` to the proper path to `idb-keyval.js`.
 
-## Client Storage API
+## Storage API
 
-The API provided by the **Client Storage** adapters can be accessed, for each adapter, like this:
+The API provided by the **Storage** adapters can be accessed, for each adapter, like this:
 
 ```js
 // for IndexedDB:
-import { has, get, set, remove } from "@lo-fi/client-storage/idb";
+import { has, get, set, remove } from "@byojs/storage/idb";
 
 await has("Hello");             // false
 
@@ -196,7 +196,7 @@ npm run build:all
 
 This library only works in a browser, so its automated test suite must also be run in a browser.
 
-Visit [`https://mylofi.github.io/client-storage/`](https://mylofi.github.io/client-storage/) and click the "run tests" button.
+Visit [`https://byojs.github.io/storage/`](https://byojs.github.io/storage/) and click the "run tests" button.
 
 ### Run Locally
 

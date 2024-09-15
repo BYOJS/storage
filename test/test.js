@@ -1,12 +1,12 @@
 // note: these module specifiers come from the import-map
 //    in index.html; swap "src" for "dist" here to test
 //    against the dist/* files
-import IDBStore from "client-storage/src/idb";
-import LSStore from "client-storage/src/local-storage";
-import SSStore from "client-storage/src/session-storage";
-import CookieStore from "client-storage/src/cookie";
-import OPFSStore from "client-storage/src/opfs";
-import OPFSWorkerStore from "client-storage/src/opfs-worker";
+import IDBStore from "storage/src/idb";
+import LSStore from "storage/src/local-storage";
+import SSStore from "storage/src/session-storage";
+import CookieStore from "storage/src/cookie";
+import OPFSStore from "storage/src/opfs";
+import OPFSWorkerStore from "storage/src/opfs-worker";
 
 
 // ***********************

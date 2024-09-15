@@ -1,7 +1,7 @@
 {
-	"name": "@lo-fi/client-storage",
+	"name": "@byojs/storage",
 	"description": "Simple key-value storage API backed by various client storage mechanisms",
-	"version": "0.10.1",
+	"version": "0.11.0",
 	"exports": {
 		"./idb": "./dist/adapter.idb.mjs",
 		"./local-storage": "./dist/adapter.local-storage.mjs",
@@ -11,12 +11,12 @@
 		"./opfs-worker": "./dist/adapter.opfs-worker.mjs"
 	},
 	"browser": {
-		"@lo-fi/client-storage/idb": "./dist/adapter.idb.mjs",
-		"@lo-fi/client-storage/local-storage": "./dist/adapter.local-storage.mjs",
-		"@lo-fi/client-storage/session-storage": "./dist/adapter.session-storage.mjs",
-		"@lo-fi/client-storage/cookie": "./dist/adapter.cookie.mjs",
-		"@lo-fi/client-storage/opfs": "./dist/adapter.opfs.mjs",
-		"@lo-fi/client-storage/opfs-worker": "./dist/adapter.opfs-worker.mjs"
+		"@byojs/storage/idb": "./dist/adapter.idb.mjs",
+		"@byojs/storage/local-storage": "./dist/adapter.local-storage.mjs",
+		"@byojs/storage/session-storage": "./dist/adapter.session-storage.mjs",
+		"@byojs/storage/cookie": "./dist/adapter.cookie.mjs",
+		"@byojs/storage/opfs": "./dist/adapter.opfs.mjs",
+		"@byojs/storage/opfs-worker": "./dist/adapter.opfs-worker.mjs"
 	},
 	"scripts": {
 		"build:all": "node scripts/build-all.js",
@@ -37,16 +37,16 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/mylofi/client-storage.git"
+		"url": "git+https://github.com/byojs/storage.git"
 	},
 	"keywords": [
 		"storage"
 	],
 	"bugs": {
-		"url": "https://github.com/mylofi/client-storage/issues",
+		"url": "https://github.com/byojs/storage/issues",
 		"email": "getify@gmail.com"
 	},
-	"homepage": "https://github.com/mylofi/client-storage",
+	"homepage": "https://github.com/byojs/storage",
 	"author": "Kyle Simpson <getify@gmail.com>",
 	"license": "MIT"
 }
