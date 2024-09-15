@@ -117,7 +117,7 @@ async function runTests() {
 	];
 	var testResults = [];
 
-	testResultsEl.innerHTML = "Client Storage tests running...<br>";
+	testResultsEl.innerHTML = "Storage tests running...<br>";
 
 	var stores = [ IDBStore, LSStore, SSStore, CookieStore, OPFSStore, OPFSWorkerStore, ];
 	for (let store of stores) {
