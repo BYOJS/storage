@@ -36,11 +36,8 @@ export default publicAPI;
 
 // ***********************
 
-// function has(name) {
-// 	// note: https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem#return_value
-// 	return (window.localStorage.getItem(name) !== null);
-// }
 async function has(name) {
+	// note: https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem#return_value
 	return (window.localStorage.getItem(name) !== null);
 }
 
