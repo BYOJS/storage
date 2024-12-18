@@ -65,6 +65,7 @@ async function runTests() {
 		[ "idb", "remove", true ],
 		[ "idb", "keys(2)", [ "meaning", ], ],
 		[ "idb", "setMany", true],
+		[ "idb", "getMany", [ "world", { ofLife: 42, }, ], ],
 		[ "idb", "removeMany", true],
 		[ "local-storage", "has(1)", false ],
 		[ "local-storage", "get(1)", null ],
@@ -77,6 +78,7 @@ async function runTests() {
 		[ "local-storage", "remove", true ],
 		[ "local-storage", "keys(2)", [ "meaning", ], ],
 		[ "local-storage", "setMany", true],
+		[ "local-storage", "getMany", [ "world", { ofLife: 42, }, ], ],
 		[ "local-storage", "removeMany", true],
 		[ "session-storage", "has(1)", false ],
 		[ "session-storage", "get(1)", null ],
@@ -89,6 +91,7 @@ async function runTests() {
 		[ "session-storage", "remove", true ],
 		[ "session-storage", "keys(2)", [ "meaning", ], ],
 		[ "session-storage", "setMany", true],
+		[ "session-storage", "getMany", [ "world", { ofLife: 42, }, ], ],
 		[ "session-storage", "removeMany", true],
 		[ "cookie", "has(1)", false ],
 		[ "cookie", "get(1)", null ],
@@ -101,6 +104,7 @@ async function runTests() {
 		[ "cookie", "remove", true ],
 		[ "cookie", "keys(2)", [ "meaning", ], ],
 		[ "cookie", "setMany", true],
+		[ "cookie", "getMany", [ "world", { ofLife: 42, }, ], ],
 		[ "cookie", "removeMany", true],
 		[ "opfs", "has(1)", false ],
 		[ "opfs", "get(1)", null ],
@@ -141,6 +145,7 @@ async function runTests() {
 		testResults.push([ storageTypes[store.storageType][0], "keys(2)", sortKeys(filterKnownNames("hello","meaning")(await store.keys())), ]);
 		if(!store.storageType.includes("opfs")) {
 			testResults.push([ storageTypes[store.storageType][0], "setMany", await store.setMany([ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ]), ]);
+			testResults.push([ storageTypes[store.storageType][0], "getMany", await store.getMany([ "hello", "meaning", ]), ]);
 			testResults.push([ storageTypes[store.storageType][0], "removeMany", await store.removeMany([ "hello", "meaning", ]), ]);
 		}
 		await store.remove("meaning");
