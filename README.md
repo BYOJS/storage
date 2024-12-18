@@ -38,7 +38,7 @@ The main purpose of **Storage** is to provide a set of adapters that normalize a
 
 * `opfs`: [Origin Private File System (OPFS)](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), specifically [the virtual origin filesystem](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/getDirectory)
 
-    **Warning:** [Browser support for `write()`](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemWritableFileStream/write#browser_compatibility) into OPFS from the main thread (as this adapter does) is limited to desktop (not mobile!) Chromium and Firefox browsers. See `opfs-worker` for broader device/browser support.
+    **Warning:** [Browser support for `write()`](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemWritableFileStream/write#browser_compatibility) into OPFS from the main thread (as this adapter does) is limited to Chromium and Firefox browsers (not Safari). See `opfs-worker` for broader device/browser support.
 
 * `opfs-worker`: Uses a Web Worker (background thread) for OPFS access, specifically to [expand OPFS support to most devices/browsers ](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle#browser_compatibility) (via synchronous `write()` in a Web Worker or Service Worker).
 
@@ -73,9 +73,9 @@ Each mechanism is size-limited to 5MB, on most all browsers/devices. And they ar
 
 #### Cookies
 
-The `cookie` adapter stores vault data in browser cookies. There are however some strong caveats to consider before choosing this storage mechanism.
+The `cookie` adapter stores data in browser cookies. There are however some strong caveats to consider before choosing this storage mechanism.
 
-Cookies are limited to ~4KB. Moreover, the provided data object has been JSON-serialized, encrypted and then base64 string encoded, then *that value* has been put into another object that's JSON-serialized, and that string (the actual cookie value) is URI-encoded (e.g, replacing `" "` with `%20`, etc). Taking into account all these steps that inflate your data size further towards the 4KB limit, you might only be able to squeeze ~2-3KB of original application data in, under the limit.
+Cookies are limited to ~4KB. Moreover, the provided data object has been JSON-serialized and URI-encoded (e.g, replacing `" "` with `%20`, etc). These steps inflate your data size further towards the 4KB limit, so you might only be able to squeeze ~3KB of original application data in, under the limit.
 
 Also, cookies are typically sent on *every request* to a first-party origin server (images, CSS, fetch calls, etc). So that data (encrypted, of course) will be sent remotely, and will significantly weigh down all those requests.
 
@@ -85,7 +85,7 @@ All these concerns considered, the `cookie` adapter *really should not be used* 
 
 #### Origin Private File System
 
-The [Origin Private File System (OPFS)](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) web feature can be used to read/write "files" in a virtual filesystem on the client's device (private to the page's origin). The `opfs` and `opfs-worker` adapters provided with this library create JSON "files" in OPFS to store the vault data, one file per vault.
+The [Origin Private File System (OPFS)](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) web feature can be used to read/write "files" in a virtual filesystem on the client's device (private to the page's origin). The `opfs` and `opfs-worker` adapters provided with this library create JSON "files" in OPFS to store the data, one file per value.
 
 ## Deployment / Import
 

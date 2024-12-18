@@ -27,15 +27,15 @@ export default publicAPI;
 
 // ***********************
 
-function has(name) {
+async function has(name) {
 	return (name in getAllCookies());
 }
 
-function get(name) {
+async function get(name) {
 	return safeJSONParse(getAllCookies()[name]);
 }
 
-function set(name,value) {
+async function set(name,value) {
 	var expires = new Date();
 	var expiresSeconds = 400 * 24 * 60 * 60;	// 400 days from now (max allowed)
 	expires.setTime(expires.getTime() + (expiresSeconds * 1000));
@@ -64,7 +64,7 @@ function set(name,value) {
 	return true;
 }
 
-function remove(name) {
+async function remove(name) {
 	var expires = new Date();
 	expires.setTime(expires.getTime() - 1000);
 	document.cookie = [
@@ -79,11 +79,11 @@ function remove(name) {
 	return true;
 }
 
-function keys() {
+async function keys() {
 	return Object.keys(getAllCookies());
 }
 
-function entries() {
+async function entries() {
 	return (
 		Object.entries(getAllCookies())
 			.map(([ name, value ]) => ([

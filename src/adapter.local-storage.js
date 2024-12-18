@@ -27,16 +27,16 @@ export default publicAPI;
 
 // ***********************
 
-function has(name) {
+async function has(name) {
 	// note: https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem#return_value
 	return (window.localStorage.getItem(name) !== null);
 }
 
-function get(name) {
+async function get(name) {
 	return safeJSONParse(window.localStorage.getItem(name));
 }
 
-function set(name,value) {
+async function set(name,value) {
 	try {
 		window.localStorage.setItem(
 			name,
@@ -54,12 +54,12 @@ function set(name,value) {
 	}
 }
 
-function remove(name) {
+async function remove(name) {
 	window.localStorage.removeItem(name);
 	return true;
 }
 
-function keys() {
+async function keys() {
 	var storeKeys = [];
 	for (let i = 0; i < window.localStorage.length; i++) {
 		storeKeys.push(window.localStorage.key(i));
@@ -67,7 +67,7 @@ function keys() {
 	return storeKeys;
 }
 
-function entries() {
+async function entries() {
 	var storeEntries = [];
 	for (let i = 0; i < window.localStorage.length; i++) {
 		let name = window.localStorage.key(i);

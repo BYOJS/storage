@@ -27,16 +27,16 @@ export default publicAPI;
 
 // ***********************
 
-function has(name) {
+async function has(name) {
 	// note: https://developer.mozilla.org/en-US/docs/Web/API/Storage/getItem#return_value
 	return (window.sessionStorage.getItem(name) !== null);
 }
 
-function get(name) {
+async function get(name) {
 	return safeJSONParse(window.sessionStorage.getItem(name));
 }
 
-function set(name,value) {
+async function set(name,value) {
 	try {
 		window.sessionStorage.setItem(
 			name,
@@ -54,12 +54,12 @@ function set(name,value) {
 	}
 }
 
-function remove(name) {
+async function remove(name) {
 	window.sessionStorage.removeItem(name);
 	return true;
 }
 
-function keys() {
+async function keys() {
 	var storeKeys = [];
 	for (let i = 0; i < window.sessionStorage.length; i++) {
 		storeKeys.push(window.sessionStorage.key(i));
@@ -67,7 +67,7 @@ function keys() {
 	return storeKeys;
 }
 
-function entries() {
+async function entries() {
 	var storeEntries = [];
 	for (let i = 0; i < window.sessionStorage.length; i++) {
 		let name = window.sessionStorage.key(i);

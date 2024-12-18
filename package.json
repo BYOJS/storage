@@ -1,7 +1,7 @@
 {
 	"name": "@byojs/storage",
 	"description": "Simple key-value storage API backed by various client storage mechanisms",
-	"version": "0.11.1",
+	"version": "0.12.0",
 	"exports": {
 		"./idb": "./dist/adapter.idb.mjs",
 		"./local-storage": "./dist/adapter.local-storage.mjs",
@@ -31,9 +31,9 @@
 		"idb-keyval": "~6.2.1"
 	},
 	"devDependencies": {
-		"micromatch": "~4.0.5",
+		"micromatch": "~4.0.8",
 		"recursive-readdir-sync": "~1.0.6",
-		"terser": "~5.29.2"
+		"terser": "~5.37.0"
 	},
 	"repository": {
 		"type": "git",
