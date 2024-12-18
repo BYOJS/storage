@@ -64,6 +64,8 @@ async function runTests() {
 		[ "idb", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "idb", "remove", true ],
 		[ "idb", "keys(2)", [ "meaning", ], ],
+		[ "idb", "setMany", true],
+		[ "idb", "removeMany", true],
 		[ "local-storage", "has(1)", false ],
 		[ "local-storage", "get(1)", null ],
 		[ "local-storage", "set(1)", true ],
@@ -74,6 +76,8 @@ async function runTests() {
 		[ "local-storage", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "local-storage", "remove", true ],
 		[ "local-storage", "keys(2)", [ "meaning", ], ],
+		[ "local-storage", "setMany", true],
+		[ "local-storage", "removeMany", true],
 		[ "session-storage", "has(1)", false ],
 		[ "session-storage", "get(1)", null ],
 		[ "session-storage", "set(1)", true ],
@@ -84,6 +88,8 @@ async function runTests() {
 		[ "session-storage", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "session-storage", "remove", true ],
 		[ "session-storage", "keys(2)", [ "meaning", ], ],
+		[ "session-storage", "setMany", true],
+		[ "session-storage", "removeMany", true],
 		[ "cookie", "has(1)", false ],
 		[ "cookie", "get(1)", null ],
 		[ "cookie", "set(1)", true ],
@@ -94,6 +100,8 @@ async function runTests() {
 		[ "cookie", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "cookie", "remove", true ],
 		[ "cookie", "keys(2)", [ "meaning", ], ],
+		[ "cookie", "setMany", true],
+		[ "cookie", "removeMany", true],
 		[ "opfs", "has(1)", false ],
 		[ "opfs", "get(1)", null ],
 		[ "opfs", "set(1)", true ],
@@ -131,6 +139,10 @@ async function runTests() {
 		testResults.push([ storageTypes[store.storageType][0], "entries", sortKeys(filterKnownNames("hello","meaning")(await store.entries())), ]);
 		testResults.push([ storageTypes[store.storageType][0], "remove", await store.remove("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "keys(2)", sortKeys(filterKnownNames("hello","meaning")(await store.keys())), ]);
+		if(!store.storageType.includes("opfs")) {
+			testResults.push([ storageTypes[store.storageType][0], "setMany", await store.setMany([ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ]), ]);
+			testResults.push([ storageTypes[store.storageType][0], "removeMany", await store.removeMany([ "hello", "meaning", ]), ]);
+		}
 		await store.remove("meaning");
 	}
 	var testsPassed = true;

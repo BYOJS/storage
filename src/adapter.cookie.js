@@ -1,5 +1,9 @@
 import { safeJSONParse, } from "./util.js";
-
+import {
+	setMany as sharedSetMany,
+	getMany as sharedGetMany,
+	removeMany as sharedRemoveMany,
+} from "./many.js";
 
 // ***********************
 
@@ -12,6 +16,9 @@ export {
 	remove,
 	keys,
 	entries,
+	setMany,
+	getMany,
+	removeMany,
 }
 var publicAPI = {
 	storageType,
@@ -21,6 +28,10 @@ var publicAPI = {
 	remove,
 	keys,
 	entries,
+	setMany,
+	getMany,
+	removeMany,
+
 };
 export default publicAPI;
 
@@ -105,4 +116,15 @@ function getAllCookies() {
 				))
 		)
 	);
+}
+function setMany(data) {
+	return sharedSetMany(data, set);
+}
+
+function getMany(props) {
+	return sharedGetMany(props, get);
+}
+
+function removeMany(props) {
+	return sharedRemoveMany(props, remove);
 }

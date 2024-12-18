@@ -5,7 +5,11 @@ import {
 	keys as idbKeys,
 	entries as idbEntries,
 } from "idb-keyval";
-
+import {
+	setMany as sharedSetMany,
+	getMany as sharedGetMany,
+	removeMany as sharedRemoveMany,
+} from "./many.js";
 
 // ***********************
 
@@ -18,6 +22,9 @@ export {
 	remove,
 	idbKeys as keys,
 	idbEntries as entries,
+	setMany,
+	getMany,
+	removeMany,
 }
 var publicAPI = {
 	storageType,
@@ -27,6 +34,9 @@ var publicAPI = {
 	remove,
 	keys: idbKeys,
 	entries: idbEntries,
+	setMany,
+	getMany,
+	removeMany,
 };
 export default publicAPI;
 
@@ -63,4 +73,16 @@ async function set(name,value) {
 async function remove(name) {
 	await idbDel(name);
 	return true;
+}
+
+async function setMany(data) {
+	return sharedSetMany(data, set);
+}
+
+async function getMany(props) {
+	return sharedGetMany(props, get);
+}
+
+async function removeMany(props) {
+	return sharedRemoveMany(props, remove);
 }
