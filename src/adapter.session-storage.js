@@ -1,4 +1,16 @@
 import { safeJSONParse, } from "./util.js";
+import {
+	setMany,
+	getMany,
+	removeMany,
+} from "./many.js";
+
+
+// ***********************
+
+get.many = (...args) => getMany(get,...args);
+set.many = (...args) => setMany(set,...args);
+remove.many = (...args) => removeMany(remove,...args);
 
 
 // ***********************
@@ -12,7 +24,7 @@ export {
 	remove,
 	keys,
 	entries,
-}
+};
 var publicAPI = {
 	storageType,
 	has,

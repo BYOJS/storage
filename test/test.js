@@ -64,6 +64,14 @@ async function runTests() {
 		[ "idb", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "idb", "remove", true ],
 		[ "idb", "keys(2)", [ "meaning", ], ],
+		[ "idb", "{cleared} (1)", [ false, false, ], ],
+		[ "idb", "set.many (1)", true],
+		[ "idb", "get.many (1)", [ "world", { ofLife: 42, }, ], ],
+		[ "idb", "remove.many (1)", true],
+		[ "idb", "set.many (2)", true],
+		[ "idb", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
+		[ "idb", "remove.many (2)", true],
+		[ "idb", "{cleared} (2)", [ false, false, ], ],
 		[ "local-storage", "has(1)", false ],
 		[ "local-storage", "get(1)", null ],
 		[ "local-storage", "set(1)", true ],
@@ -74,6 +82,14 @@ async function runTests() {
 		[ "local-storage", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "local-storage", "remove", true ],
 		[ "local-storage", "keys(2)", [ "meaning", ], ],
+		[ "local-storage", "{cleared} (1)", [ false, false, ], ],
+		[ "local-storage", "set.many (1)", true],
+		[ "local-storage", "get.many (1)", [ "world", { ofLife: 42, }, ], ],
+		[ "local-storage", "remove.many (1)", true],
+		[ "local-storage", "set.many (2)", true],
+		[ "local-storage", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
+		[ "local-storage", "remove.many (2)", true],
+		[ "local-storage", "{cleared} (2)", [ false, false, ], ],
 		[ "session-storage", "has(1)", false ],
 		[ "session-storage", "get(1)", null ],
 		[ "session-storage", "set(1)", true ],
@@ -84,6 +100,14 @@ async function runTests() {
 		[ "session-storage", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "session-storage", "remove", true ],
 		[ "session-storage", "keys(2)", [ "meaning", ], ],
+		[ "session-storage", "{cleared} (1)", [ false, false, ], ],
+		[ "session-storage", "set.many (1)", true],
+		[ "session-storage", "get.many (1)", [ "world", { ofLife: 42, }, ], ],
+		[ "session-storage", "remove.many (1)", true],
+		[ "session-storage", "set.many (2)", true],
+		[ "session-storage", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
+		[ "session-storage", "remove.many (2)", true],
+		[ "session-storage", "{cleared} (2)", [ false, false, ], ],
 		[ "cookie", "has(1)", false ],
 		[ "cookie", "get(1)", null ],
 		[ "cookie", "set(1)", true ],
@@ -94,6 +118,14 @@ async function runTests() {
 		[ "cookie", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "cookie", "remove", true ],
 		[ "cookie", "keys(2)", [ "meaning", ], ],
+		[ "cookie", "{cleared} (1)", [ false, false, ], ],
+		[ "cookie", "set.many (1)", true],
+		[ "cookie", "get.many (1)", [ "world", { ofLife: 42, }, ], ],
+		[ "cookie", "remove.many (1)", true],
+		[ "cookie", "set.many (2)", true],
+		[ "cookie", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
+		[ "cookie", "remove.many (2)", true],
+		[ "cookie", "{cleared} (2)", [ false, false, ], ],
 		[ "opfs", "has(1)", false ],
 		[ "opfs", "get(1)", null ],
 		[ "opfs", "set(1)", true ],
@@ -104,6 +136,14 @@ async function runTests() {
 		[ "opfs", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "opfs", "remove", true ],
 		[ "opfs", "keys(2)", [ "meaning", ], ],
+		[ "opfs", "{cleared} (1)", [ false, false, ], ],
+		[ "opfs", "set.many (1)", true],
+		[ "opfs", "get.many (1)", [ "world", { ofLife: 42, }, ], ],
+		[ "opfs", "remove.many (1)", true],
+		[ "opfs", "set.many (2)", true],
+		[ "opfs", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
+		[ "opfs", "remove.many (2)", true],
+		[ "opfs", "{cleared} (2)", [ false, false, ], ],
 		[ "opfs-worker", "has(1)", false ],
 		[ "opfs-worker", "get(1)", null ],
 		[ "opfs-worker", "set(1)", true ],
@@ -114,6 +154,14 @@ async function runTests() {
 		[ "opfs-worker", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
 		[ "opfs-worker", "remove", true ],
 		[ "opfs-worker", "keys(2)", [ "meaning", ], ],
+		[ "opfs-worker", "{cleared} (1)", [ false, false, ], ],
+		[ "opfs-worker", "set.many (1)", true],
+		[ "opfs-worker", "get.many (1)", [ "world", { ofLife: 42, }, ], ],
+		[ "opfs-worker", "remove.many (1)", true],
+		[ "opfs-worker", "set.many (2)", true],
+		[ "opfs-worker", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
+		[ "opfs-worker", "remove.many (2)", true],
+		[ "opfs-worker", "{cleared} (2)", [ false, false, ], ],
 	];
 	var testResults = [];
 
@@ -132,6 +180,17 @@ async function runTests() {
 		testResults.push([ storageTypes[store.storageType][0], "remove", await store.remove("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "keys(2)", sortKeys(filterKnownNames("hello","meaning")(await store.keys())), ]);
 		await store.remove("meaning");
+
+		testResults.push([ storageTypes[store.storageType][0], "{cleared} (1)", await Promise.all(["hello","world"].map(store.has)), ]);
+
+		testResults.push([ storageTypes[store.storageType][0], "set.many (1)", await store.set.many([ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ]), ]);
+		testResults.push([ storageTypes[store.storageType][0], "get.many (1)", await store.get.many([ "hello", "meaning", ]), ]);
+		testResults.push([ storageTypes[store.storageType][0], "remove.many (1)", await store.remove.many([ "hello", "meaning", ]), ]);
+		testResults.push([ storageTypes[store.storageType][0], "set.many (2)", await store.set.many({ hello: "world", meaning: { ofLife: 42, }, }), ]);
+		testResults.push([ storageTypes[store.storageType][0], "get.many (2)", await store.get.many({ hello: null, meaning: null, }), ]);
+		testResults.push([ storageTypes[store.storageType][0], "remove.many (2)", await store.remove.many({ hello: null, meaning: null, }), ]);
+
+		testResults.push([ storageTypes[store.storageType][0], "{cleared} (2)", await Promise.all(["hello","world"].map(store.has)), ]);
 	}
 	var testsPassed = true;
 	for (let [ testIdx, testResult ] of testResults.entries()) {

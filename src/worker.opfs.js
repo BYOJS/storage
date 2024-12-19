@@ -2,9 +2,18 @@ import {
 	isPromise,
 	getRootFS,
 } from "./util.js";
+import {
+	setMany,
+	getMany,
+	removeMany,
+} from "./many.js";
 
 
 // ***********************
+
+get.many = (...args) => getMany(get,...args);
+set.many = (...args) => setMany(set,...args);
+remove.many = (...args) => removeMany(remove,...args);
 
 self.addEventListener("message",onMessage);
 self.postMessage({ "ready": true });
@@ -16,8 +25,11 @@ async function onMessage({ data, } = {}) {
 	var recognizedMessages = {
 		has,
 		get,
+		"get.many": get.many,
 		set,
+		"set.many": set.many,
 		remove,
+		"remove.many": remove.many,
 		keys,
 		entries,
 	};

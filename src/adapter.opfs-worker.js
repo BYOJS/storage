@@ -7,6 +7,16 @@ import {
 
 // ***********************
 
+get.many = async (...args) => (
+	(await sendToWorker("get.many",...args))
+		.map(safeJSONParse)
+);
+set.many = (...args) => sendToWorker("set.many",...args);
+remove.many = (...args) => sendToWorker("remove.many",...args);
+
+
+// ***********************
+
 var worker = null;
 var pending = null;
 var workerListeners = [];

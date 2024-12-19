@@ -104,8 +104,8 @@ If you are using a bundler (Astro, Vite, Webpack, etc) for your web application,
 Just `import` the adapter(s) of your choice, like so:
 
 ```js
-// {WHICHEVER}: "idb", "local-storage", etc
-import { get, set } from "@byojs/storage/{WHICHEVER}";
+// {TYPE}: "idb", "local-storage", etc
+import { get, set } from "@byojs/storage/{TYPE}";
 ```
 
 The bundler tool should pick up and find whatever files (and dependencies) are needed.
@@ -134,8 +134,8 @@ If you are not using a bundler (Astro, Vite, Webpack, etc) for your web applicat
 Now, you'll be able to `import` the library in your app in a friendly/readable way:
 
 ```js
-// {WHICHEVER}: "idb", "local-storage", etc
-import { get, set } from "storage/{WHICHEVER}";
+// {TYPE}: "idb", "local-storage", etc
+import { get, set } from "storage/{TYPE}";
 ```
 
 **Note:** If you omit the above *adapter* import-map entries, you can still `import` **Storage** by specifying the proper full path to whichever `adapter.*.mjs` file(s) you want to use.
@@ -148,7 +148,7 @@ The API provided by the **Storage** adapters can be accessed, for each adapter, 
 
 ```js
 // for IndexedDB:
-import { has, get, set, remove } from "@byojs/storage/idb";
+import { has, get, set, remove } from "{..}/idb";
 
 await has("Hello");             // false
 
@@ -180,6 +180,70 @@ The key-value oriented methods available on each adapter's API are:
 * `entries()`: returns an array of `[ key, value ]` tuples
 
 **NOTE:** All of these methods are async (promise-returning).
+
+### Many API
+
+The `get(..)`, `set(..)`, and `remove(..)` methods also support a bulk-call form, to process multiple keys/values at once:
+
+```js
+// for IndexedDB:
+import { has, get, set, remove } from "{..}/idb";
+
+var entries = [
+    [ "Hello", "World!" ],
+    [ "special", 42 ]
+];
+
+await set.many(entries);
+// true
+
+var keys = entries.map(([ key, val ]) => key);
+// [ "Hello", "special" ]
+
+await get.many(keys);
+// [ "World!", 42 ]
+
+await Promise.all(keys.map(has));
+// [ true, true ]
+
+await remove.many(keys);
+// true
+
+await Promise.all(keys.map(has));
+// [ false, false ]
+```
+
+The `*.many(..)` methods also accept objects:
+
+```js
+import { has, get, set, remove } from "{..}/idb";
+
+var obj = {
+    Hello: "World!",
+    special: 42
+};
+
+await set.many(obj);
+// true
+
+var keysObj = {
+    Hello: null,
+    special: null
+};
+var keysArr = Object.keys(keys)
+
+await get.many(keysObj);
+// [ "World!", 42 ]
+
+await Promise.all(keysArr.map(has));
+// [ true, true ]
+
+await remove.many(keysObj);
+// true
+
+await Promise.all(keysArr.map(has));
+// [ false, false ]
+```
 
 ## Re-building `dist/*`
 
