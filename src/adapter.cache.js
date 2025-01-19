@@ -59,7 +59,7 @@ async function set(name, value) {
 		if ('storage' in navigator && 'estimate' in navigator.storage) {
 			navigator.storage.estimate().then(({ usage, quota }) => {
 				if (usage >= quota) {
-					throw new Error("Browser storage is full.", { cause: err, });
+					throw new DOMException("Browser storage is full","QuotaExceededError");
 				}
 			});
 		}

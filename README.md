@@ -22,7 +22,7 @@ await get("Hello");               // "World!"
 
 ## Overview
 
-The main purpose of **Storage** is to provide a set of adapters that normalize across various client side storage mechanisms (`localStorage` / `sessionStorage`, IndexedDB, cookies, and OPFS) with a consistent key-value API (`get()`, `set()`, etc).
+The main purpose of **Storage** is to provide a set of adapters that normalize across various client side storage mechanisms (`localStorage` / `sessionStorage`, IndexedDB, cookies, OPFS, and cache) with a consistent key-value API (`get()`, `set()`, etc).
 
 ## Client Side Storage Adapters
 
@@ -43,6 +43,8 @@ The main purpose of **Storage** is to provide a set of adapters that normalize a
 * `opfs-worker`: Uses a Web Worker (background thread) for OPFS access, specifically to [expand OPFS support to most devices/browsers ](https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle#browser_compatibility) (via synchronous `write()` in a Web Worker or Service Worker).
 
     **Warning:** Web workers in some cases require modified security settings (for the site/app) -- for example, [a Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), specifically [the `worker-src` directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/worker-src).
+
+* `cache`: [CacheStorage](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) and [Cache](https://developer.mozilla.org/en-US/docs/Web/API/Cache)
 
 Each of these client-side storage mechanisms has its own pros/cons, so choice should be made carefully.
 
@@ -124,6 +126,7 @@ If you are not using a bundler (Astro, Vite, Webpack, etc) for your web applicat
         "storage/cookie": "/path/to/js-assets/storage/adapter.cookie.mjs",
         "storage/opfs": "/path/to/js-assets/storage/adapter.opfs.mjs",
         "storage/opfs-worker": "/path/to/js-assets/storage/adapter.opfs-worker.mjs",
+        "storage/cache": "/path/to/js-assets/storage/adapter.cache.mjs",
 
         "idb-keyval": "/path/to/js-assets/storage/external/idb-keyval.js"
     }
