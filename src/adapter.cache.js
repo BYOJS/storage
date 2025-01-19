@@ -8,15 +8,15 @@ import {
 
 // ***********************
 
-get.many = (...args) => getMany(get,...args);
-set.many = (...args) => setMany(set,...args);
-remove.many = (...args) => removeMany(remove,...args);
+get.many = (...args) => getMany(get, ...args);
+set.many = (...args) => setMany(set, ...args);
+remove.many = (...args) => removeMany(remove, ...args);
 
 
 // ***********************
 
 var storageType = "cache";
-const CACHE_NAME = "generic-key-value-cache";
+const CACHE_NAME_PREFIX = "cache-kvstore-";
 export {
 	storageType,
 	has,
@@ -40,31 +40,26 @@ export default publicAPI;
 // ***********************
 
 async function has(name) {
-	// note: https://developer.mozilla.org/en-US/docs/Web/API/Cache/match#return_value
-	const cache = await openCache();
-	const request = new Request(name);
-	const response = await cache.match(request);
-	return response !== undefined;
+	return await caches.has(`${CACHE_NAME_PREFIX}${name}`);
 }
 
 async function get(name) {
-	const cache = await openCache();
 	const request = new Request(name);
-	const response = await cache.match(request);
+	const response = await caches.match(request);
 	return safeJSONParse(response !== undefined ? await response.json() : null);
 }
 
-async function set(name,value) {
+async function set(name, value) {
 	try {
-		const cache = await openCache();
+		const cache = await caches.open(`${CACHE_NAME_PREFIX}${name}`);;
 		const request = new Request(name);
 		const response = new Response(JSON.stringify(value));
 		await cache.put(request, response);
 
 		if ('storage' in navigator && 'estimate' in navigator.storage) {
-			navigator.storage.estimate().then(({usage, quota}) => {
+			navigator.storage.estimate().then(({ usage, quota }) => {
 				if (usage >= quota) {
-					throw new Error("Browser storage is full.",{ cause: err, });
+					throw new Error("Browser storage is full.", { cause: err, });
 				}
 			});
 		}
@@ -76,34 +71,37 @@ async function set(name,value) {
 }
 
 async function remove(name) {
-	const cache = await openCache();
-	const request = new Request(name);
-	return await cache.delete(request);
+	return await caches.delete(`${CACHE_NAME_PREFIX}${name}`);
 }
 
 async function keys() {
-	const cache = await openCache();
-	const requests = await cache.keys();
-	return requests.map(request => request.url.split('/').pop());
+	const cacheList = await caches.keys();
+	const storeKeys = [];
+	for (const cacheName of cacheList) {
+		const cache = await caches.open(cacheName);
+		const requests = await cache.keys();
+		const cacheKeys = requests.map(request => request.url.split('/').pop());
+		storeKeys.push(...cacheKeys);
+	}
+	return storeKeys;
 }
 
 async function entries() {
+	const cacheList = await caches.keys();
 	const storeEntries = [];
-	const cache = await openCache();
-	const requests = await cache.keys();
-	for (const request of requests) {
-	  const response = await cache.match(request);
-	  if (response) {
-		const value = safeJSONParse(await response.json());
-		storeEntries.push([
-			request.url.split('/').pop(),
-			value
-		]);
-	  }
+	for (const cacheName of cacheList) {
+		const cache = await caches.open(cacheName);
+		const requests = await cache.keys();
+		for (const request of requests) {
+			const response = await cache.match(request);
+			if (response) {
+				const value = safeJSONParse(await response.json());
+				storeEntries.push([
+					request.url.split('/').pop(),
+					value
+				]);
+			}
+		}
 	}
 	return storeEntries;
-}
-
-async function openCache() {
-	return await caches.open(CACHE_NAME);
 }
