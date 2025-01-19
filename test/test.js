@@ -7,6 +7,7 @@ import SSStore from "storage/src/session-storage";
 import CookieStore from "storage/src/cookie";
 import OPFSStore from "storage/src/opfs";
 import OPFSWorkerStore from "storage/src/opfs-worker";
+import CacheStore from "storage/src/cache";
 
 
 // ***********************
@@ -18,6 +19,7 @@ const storageTypes = {
 	"cookie": [ "Cookies", CookieStore, ],
 	"opfs": [ "Origin Private FS", OPFSStore, ],
 	"opfs-worker": [ "OPFS-Worker", OPFSWorkerStore, ],
+	"cache": [ "Cache", CacheStore, ],
 };
 
 var runTestsBtn;
@@ -162,12 +164,30 @@ async function runTests() {
 		[ "opfs-worker", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
 		[ "opfs-worker", "remove.many (2)", true],
 		[ "opfs-worker", "{cleared} (2)", [ false, false, ], ],
+		[ "cache", "has(1)", false ],
+		[ "cache", "get(1)", null ],
+		[ "cache", "set(1)", true ],
+		[ "cache", "has(2)", true ],
+		[ "cache", "get(2)", "world" ],
+		[ "cache", "set(2)", true ],
+		[ "cache", "keys(1)", [ "hello", "meaning", ], ],
+		[ "cache", "entries", [ [ "hello", "world", ], [ "meaning", { ofLife: 42, }, ], ], ],
+		[ "cache", "remove", true ],
+		[ "cache", "keys(2)", [ "meaning", ], ],
+		[ "cache", "{cleared} (1)", [ false, false, ], ],
+		[ "cache", "set.many (1)", true],
+		[ "cache", "get.many (1)", [ "world", { ofLife: 42, }, ], ],
+		[ "cache", "remove.many (1)", true],
+		[ "cache", "set.many (2)", true],
+		[ "cache", "get.many (2)", [ "world", { ofLife: 42, }, ], ],
+		[ "cache", "remove.many (2)", true],
+		[ "cache", "{cleared} (2)", [ false, false, ], ],
 	];
 	var testResults = [];
 
 	testResultsEl.innerHTML = "Storage tests running...<br>";
 
-	var stores = [ IDBStore, LSStore, SSStore, CookieStore, OPFSStore, OPFSWorkerStore, ];
+	var stores = [ IDBStore, LSStore, SSStore, CookieStore, OPFSStore, OPFSWorkerStore, CacheStore, ];
 	for (let store of stores) {
 		testResults.push([ storageTypes[store.storageType][0], "has(1)", await store.has("hello"), ]);
 		testResults.push([ storageTypes[store.storageType][0], "get(1)", await store.get("hello"), ]);
