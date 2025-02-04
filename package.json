@@ -1,7 +1,7 @@
 {
 	"name": "@byojs/storage",
 	"description": "Simple key-value storage API backed by various client storage mechanisms",
-	"version": "0.12.0",
+	"version": "0.12.1",
 	"exports": {
 		"./idb": "./dist/adapter.idb.mjs",
 		"./local-storage": "./dist/adapter.local-storage.mjs",
